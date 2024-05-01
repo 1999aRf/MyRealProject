@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,44 +13,41 @@ import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
-    private final Map<Long, Faculty> faculties = new HashMap<>();
-    private long nextId = 1;
+    @Autowired
+    private final FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     // Создание факультета
-    public Faculty createFaculty(String name, String color) {
-        Faculty faculty = new Faculty(nextId++, name, color);
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+    public Faculty createFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
     }
 
     // Получение факультета по ID
     public Faculty findFaculty(Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).get();
     }
 
     // Получение всех факультетов
     public Collection<Faculty> getAllFaculties() {
-        return faculties.values();
+        return facultyRepository.findAll();
     }
 
     // Обновление данных факультета
-    public Faculty updateFaculty(Long id, String name, String color) {
-        Faculty faculty = faculties.get(id);
-        if (faculty != null) {
-            faculty.setName(name);
-            faculty.setColor(color);
-        }
-        return faculty;
+    public Faculty updateFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
     }
 
     // Удаление факультета
-    public boolean deleteFaculty(Long id) {
-        return faculties.remove(id) != null;
+    public void deleteFaculty(Long id) {
+        facultyRepository.deleteById(id);
     }
 
     public Collection<Faculty> findFacultiesByColor(String color) {
-        return faculties.values().stream()
-                .filter(faculty -> faculty.getColor().equalsIgnoreCase(color))
-                .collect(Collectors.toList());
+        return facultyRepository.findAll().stream()
+                                .filter(faculty -> faculty.getColor().equalsIgnoreCase(color))
+                                .collect(Collectors.toList());
     }
 }
