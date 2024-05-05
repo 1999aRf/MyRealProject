@@ -1,13 +1,12 @@
 package ru.hogwarts.school.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +24,7 @@ public class StudentService {
     }
 
     public Student findStudent(Long Id) {
-        return studentRepository.findById(Id).get();
+        return studentRepository.findById(Id).orElseThrow(EntityNotFoundException::new);
     }
 
     public Collection<Student> getAllStudents() {
@@ -41,8 +40,12 @@ public class StudentService {
     }
 
     public Collection<Student> findStudentsByAge(int age) {
-        return studentRepository.findAll().stream()
+        return getAllStudents().stream()
                                 .filter(student -> student.getAge() == age)
                                 .collect(Collectors.toList());
+    }
+
+    public Collection<Student> findStudentByBetweenAge(int ageMin, int ageMax) {
+        return studentRepository.findStudentByAgeBetween(ageMin, ageMax);
     }
 }
