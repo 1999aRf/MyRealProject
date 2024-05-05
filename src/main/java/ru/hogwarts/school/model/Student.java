@@ -13,8 +13,6 @@ public class Student {
     private int age;
     public Student() {
     }
-    public Student() {
-    }
 
     public Long getId() {
         return id;

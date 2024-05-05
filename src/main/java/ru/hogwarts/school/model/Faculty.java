@@ -13,8 +13,6 @@ public class Faculty {
     private String color;
     public Faculty() {
     }
-    public Faculty() {
-    }
 
     public Long getId() {
         return id;
