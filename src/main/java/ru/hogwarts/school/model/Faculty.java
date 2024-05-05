@@ -11,7 +11,8 @@ public class Faculty {
     private Long id;
     private String name;
     private String color;
-
+    public Faculty() {
+    }
     public Faculty() {
     }
 
