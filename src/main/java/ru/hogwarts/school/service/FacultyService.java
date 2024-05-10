@@ -4,14 +4,15 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
-    @Autowired
     private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
@@ -45,5 +46,11 @@ public class FacultyService {
 
     public Collection<Faculty> findFacultiesByColor(String color) {
         return facultyRepository.findFacultiesByColor(color);
+    }
+
+    public List<Student> getStudentFaculty(Long facultyId) {
+        return facultyRepository.findById(facultyId)
+                .map(Faculty::getStudents)
+                .orElseThrow(() -> new EntityNotFoundException("Faculty not found"));
     }
 }

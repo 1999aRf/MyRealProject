@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/faculty")
 public class FacultyController {
     private FacultyService facultyService;
-    private FacultyRepository facultyRepository;
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
@@ -68,8 +67,6 @@ public class FacultyController {
     }
     @GetMapping("/{id}/students")
     public List<Student> getFacultyStudents(@PathVariable Long id) {
-        return facultyRepository.findById(id)
-                .map(Faculty::getStudents)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Faculty not found"));
+        return facultyService.getStudentFaculty(id);
     }
 }

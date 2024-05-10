@@ -1,13 +1,9 @@
 package ru.hogwarts.school.controller;
 
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -16,7 +12,6 @@ import java.util.Collection;
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
-    private StudentRepository studentRepository;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -70,9 +65,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/faculty")
-    public Faculty getStudentFaculty(@PathVariable Long id) {
-        return studentRepository.findById(id)
-                .map(Student::getFaculty)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
+    public Faculty getFacultyStudent(@PathVariable Long id) {
+        return studentService.getFacultyStudent(id);
     }
 }
