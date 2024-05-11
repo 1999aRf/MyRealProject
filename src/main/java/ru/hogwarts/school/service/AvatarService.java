@@ -31,7 +31,7 @@ public class AvatarService {
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
         Student student = studentService.findStudent(studentId);
 
-        Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(avatarFile.getOriginalFilename()));
+        Path filePath = buildFilePath(student, avatarFile.getOriginalFilename());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -43,57 +43,29 @@ public class AvatarService {
             bis.transferTo(bos);
         }
 
-        Avatar avatar = findAvatar(studentId);
-        avatar.setStudent(student);
-        avatar.setFilePath(filePath.toString());
-        avatar.setFileSize(avatarFile.getSize());
-        avatar.setMediaType(avatarFile.getContentType());
-        avatar.setData(avatarFile.getBytes());
-        avatarRepository.save(avatar);
+        saveInDB(studentId, student, filePath, avatarFile);
     }
 
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
-
-//    public byte[] getAvatarData(Long studentId) throws FileNotFoundException {
-//        Avatar avatar = findAvatar(studentId);
-//        if (avatar == null || avatar.getData() == null) {
-//            throw new FileNotFoundException("Avatar not found for student id: " + studentId);
-//        }
-//        return avatar.getData();
-//    }
-//
-//    public byte[] getAvatarFromFileSystem(Long studentId) throws IOException {
-//        Avatar avatar = findAvatar(studentId);
-//        if (avatar == null) {
-//            throw new FileNotFoundException("Avatar not found for student id: " + studentId);
-//        }
-//        Path filePath = Path.of(avatar.getFilePath());
-//        if (!Files.exists(filePath)) {
-//            throw new FileNotFoundException("Avatar not found for student id: " + studentId);
-//        }
-//        return Files.readAllBytes(filePath);
-//    }
-//
     public Avatar findAvatar(Long studentId) {
-        return avatarRepository.findByStudentId(studentId).orElseThrow();
+        return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
+    }
+
+    private Path buildFilePath(Student student, String fileName) {
+        return Path.of(avatarsDir, student.getId() + "_" + student.getName() + "_" + getExtension(fileName));
+    }
+
+    private void saveInDB(Long studentId, Student student, Path filePath, MultipartFile avatarFile) throws IOException {
+        Avatar avatar = findAvatar(studentId);
+
+        avatar.setStudent(student);
+        avatar.setFilePath(filePath.toString());
+        avatar.setFileSize(avatarFile.getSize());
+        avatar.setMediaType(avatarFile.getContentType());
+        avatar.setData(avatarFile.getBytes());
+
+        avatarRepository.save(avatar);
     }
 }
-//
-//    private byte[] generateImageData(Path filePath) throws IOException {
-//        try (InputStream is = Files.newInputStream(filePath);
-//             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-//             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-//            BufferedImage image = ImageIO.read(bis);
-//
-//            int height = image.getHeight() / (image.getWidth() / 100);
-//            BufferedImage preview = new BufferedImage(100, height, image.getType());
-//            Graphics2D graphics = preview.createGraphics();
-//            graphics.drawImage(image, 0, 0, 100, height, null);
-//            graphics.dispose();
-//
-//            ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
-//            return baos.toByteArray();
-//        }
-//    }
