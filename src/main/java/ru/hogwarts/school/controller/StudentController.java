@@ -4,17 +4,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
+    private final StudentRepository studentRepository;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, StudentRepository studentRepository) {
         this.studentService = studentService;
+        this.studentRepository = studentRepository;
     }
 
     @PostMapping
@@ -37,7 +41,7 @@ public class StudentController {
 
     @GetMapping("/age")
     public Collection<Student> getStudentsByAgeRange(@RequestParam int min, @RequestParam int max) {
-        return studentService.findStudentByBetweenAge(min, max);
+        return studentService.findByBetweenAge(min, max);
     }
 
     @PutMapping
@@ -67,5 +71,23 @@ public class StudentController {
     @GetMapping("/{id}/faculty")
     public Faculty getFacultyStudent(@PathVariable Long id) {
         return studentService.getFacultyStudent(id);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getTotalStudentsCount() {
+        Long count = studentRepository.countTotalStudents();
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/average-age")
+    public ResponseEntity<Double> getAverageAge() {
+        Double averageAge = studentRepository.getAverageAge();
+        return ResponseEntity.ok(averageAge);
+    }
+
+    @GetMapping("/last-five")
+    public ResponseEntity<List<Student>> getLastFiveStudents() {
+        List<Student> lastFiveStudents = studentRepository.findLastFiveStudents();
+        return ResponseEntity.ok(lastFiveStudents);
     }
 }
