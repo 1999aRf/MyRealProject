@@ -14,11 +14,9 @@ import java.util.List;
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
-    private final StudentRepository studentRepository;
 
     public StudentController(StudentService studentService, StudentRepository studentRepository) {
         this.studentService = studentService;
-        this.studentRepository = studentRepository;
     }
 
     @PostMapping
@@ -75,19 +73,19 @@ public class StudentController {
 
     @GetMapping("/count")
     public ResponseEntity<Long> getTotalStudentsCount() {
-        Long count = studentRepository.countTotalStudents();
+        Long count = studentService.countTotalStudents();
         return ResponseEntity.ok(count);
     }
 
     @GetMapping("/average-age")
     public ResponseEntity<Double> getAverageAge() {
-        Double averageAge = studentRepository.getAverageAge();
+        Double averageAge = studentService.getAverageAge();
         return ResponseEntity.ok(averageAge);
     }
 
     @GetMapping("/last-five")
     public ResponseEntity<List<Student>> getLastFiveStudents() {
-        List<Student> lastFiveStudents = studentRepository.findLastFiveStudents();
+        List<Student> lastFiveStudents = studentService.findLastFiveStudents();
         return ResponseEntity.ok(lastFiveStudents);
     }
 }
