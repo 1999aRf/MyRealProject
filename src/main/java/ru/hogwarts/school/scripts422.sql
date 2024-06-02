@@ -7,9 +7,11 @@ CREATE TABLE Car (
 
 CREATE TABLE Person (
     person_id SERIAL PRIMARY KEY,
+    car_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     age INT CHECK (age > 0),
-    has_license BOOLEAN NOT NULL
+    has_license BOOLEAN NOT NULL,
+    FOREIGN KEY (car_id) REFERENCES Car (car_id) ON DELETE CASCADE
 );
 
 SELECT
