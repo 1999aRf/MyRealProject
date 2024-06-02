@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1 create index on student name
+      author: rinatagliulov
+      changes:
+        - createIndex:
+            tableName: student
+            indexName: idx_student_name
+            columns:
+              - column:
+                  name: name
+
+  - changeSet:
+      id: 2 create composite index on faculty name and color
+      author: rinatagliulov
+      changes:
+        - createIndex:
+            tableName: faculty
+            indexName: idx_faculty_name_color
+            columns:
+              - column:
+                  name: name
+              - column:
+                  name: color
