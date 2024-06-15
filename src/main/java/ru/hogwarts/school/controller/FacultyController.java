@@ -60,7 +60,7 @@ public class FacultyController {
         }
         return ResponseEntity.ok(faculties);
     }
-    @GetMapping("/{id}/students")
+    @GetMapping("/students/{id}")
     public List<Student> getFacultyStudents(@PathVariable Long id) {
         return facultyService.getStudentFaculty(id);
     }
