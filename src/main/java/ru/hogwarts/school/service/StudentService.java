@@ -9,12 +9,12 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class StudentService {
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository studentRepository;
-
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -55,12 +55,12 @@ public class StudentService {
 
     public Collection<Student> findStudentsByAge(int age) {
         logger.debug("Was invoked method for finding students by age = {}", age);
-        return studentRepository.findStudentsByAge(age);
+        return studentRepository.findByAge(age);
     }
 
     public Collection<Student> findStudentByBetweenAge(int ageMin, int ageMax) {
         logger.debug("Was invoked method for finding students between ages {} and {}", ageMin, ageMax);
-        return studentRepository.findStudentByAgeBetween(ageMin, ageMax);
+           return studentRepository.findByAgeBetween(ageMin, ageMax);
     }
 
     public Faculty getFacultyStudent(Long studentId) {
@@ -71,5 +71,17 @@ public class StudentService {
                     logger.error("Student not found with id = {}", studentId);
                     return new EntityNotFoundException("Student not found");
                 });
+    }
+
+    public Long countTotalStudents() {
+        return studentRepository.countTotalStudents();
+    }
+
+    public Double getAverageAge() {
+        return studentRepository.getAverageAge();
+    }
+
+    public List<Student> findLastFiveStudents() {
+        return studentRepository.findLastFiveStudents();
     }
 }
