@@ -100,4 +100,16 @@ public class StudentController {
         Collection<String> namesByA = studentService.getNamesByA();
         return ResponseEntity.ok(namesByA);
     }
+
+    @GetMapping("/print-parallel")
+    public ResponseEntity<Void> printStudentsParallel() {
+        studentService.printStudentsParallel();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/print-synchronized")
+    public ResponseEntity<Void> printStudentsSync() {
+        studentService.printStudentsSync();
+        return ResponseEntity.ok().build();
+    }
 }

@@ -104,4 +104,44 @@ public class StudentService {
                 .average()
                 .orElse(0.0f);
     }
+
+    public void printStudentsParallel() {
+        List<Student> students = studentRepository.findAll();
+
+        if (students.size() >= 6) {
+            students.subList(0, 2).forEach(this::printStudent);
+            printStudentsNewThread(students.subList(2, 4));
+            printStudentsNewThread(students.subList(4, 6));
+        }
+    }
+
+    public void printStudentsSync() {
+        List<Student> students = studentRepository.findAll();
+
+        if (students.size() >= 6) {
+            students.subList(0, 2).forEach(this::printStudentSync);
+            printStudentsNewThreadSync(students.subList(2, 4));
+            printStudentsNewThreadSync(students.subList(4, 6));
+        }
+    }
+
+    private void printStudent(Student student) {
+        logger.info("Student, id: {}, name: {}", student.getId(), student.getName());
+    }
+
+    private void printStudentsNewThread(List<Student> students) {
+        new Thread(() -> {
+            students.forEach(this::printStudent);
+        }).start();
+    }
+
+    private synchronized void printStudentSync(Student student) {
+        logger.info("Student, id: {}, name: {}", student.getId(), student.getName());
+    }
+
+    private void printStudentsNewThreadSync(List<Student> students) {
+        new Thread(() -> {
+            students.forEach(this::printStudentSync);
+        }).start();
+    }
 }
