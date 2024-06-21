@@ -59,7 +59,7 @@ public class StudentController {
 
     @GetMapping("/filterByAge")
     public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam("age") int age) {
-        Collection<Student> students = studentService.findStudentsByAge(age);
+        Collection<Student> students = studentService.findByAge(age);
         if (students.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

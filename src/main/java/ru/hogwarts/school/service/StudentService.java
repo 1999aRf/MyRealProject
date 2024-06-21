@@ -54,12 +54,12 @@ public class StudentService {
         }
     }
 
-    public Collection<Student> findStudentsByAge(int age) {
+    public Collection<Student> findByAge(int age) {
         logger.debug("Was invoked method for finding students by age = {}", age);
         return studentRepository.findByAge(age);
     }
 
-    public Collection<Student> findStudentByBetweenAge(int ageMin, int ageMax) {
+    public Collection<Student> findByBetweenAge(int ageMin, int ageMax) {
         logger.debug("Was invoked method for finding students between ages {} and {}", ageMin, ageMax);
            return studentRepository.findByAgeBetween(ageMin, ageMax);
     }
