@@ -59,7 +59,7 @@ public class StudentController {
 
     @GetMapping("/filterByAge")
     public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam("age") int age) {
-        Collection<Student> students = studentService.findStudentsByAge(age);
+        Collection<Student> students = studentService.findByAge(age);
         if (students.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -87,5 +87,17 @@ public class StudentController {
     public ResponseEntity<List<Student>> getLastFiveStudents() {
         List<Student> lastFiveStudents = studentService.findLastFiveStudents();
         return ResponseEntity.ok(lastFiveStudents);
+    }
+
+    @GetMapping("/average-by-age-by-stream")
+    public ResponseEntity<Double> getAverageAgeByStream() {
+        Double averageAge = studentService.getAverageAgeByStream();
+        return ResponseEntity.ok(averageAge);
+    }
+
+    @GetMapping("/names-by-a")
+    public ResponseEntity<Collection<String>> getNamesByA() {
+        Collection<String> namesByA = studentService.getNamesByA();
+        return ResponseEntity.ok(namesByA);
     }
 }

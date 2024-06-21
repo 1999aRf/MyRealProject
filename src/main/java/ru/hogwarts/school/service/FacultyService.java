@@ -10,6 +10,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,5 +74,14 @@ public class FacultyService {
                     logger.error("Faculty not found with id = {}", facultyId);
                     return new EntityNotFoundException("Faculty not found");
                 });
+    }
+
+    public String getLongFacultyName() {
+        logger.info("Was invoked method for get long name Faculty");
+
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length))
+                .orElse("");
     }
 }

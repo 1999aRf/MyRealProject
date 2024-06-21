@@ -128,7 +128,7 @@ class StudentControllerTestMVC {
 
     @Test
     void getStudentsByAge() throws Exception{
-        when(studentRepository.findStudentsByAge(anyInt())).thenReturn(MOCK_STUDENTS);
+        when(studentRepository.findByAge(anyInt())).thenReturn(MOCK_STUDENTS);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/filterByAge?age=" + MOCK_STUDENT_AGE)
